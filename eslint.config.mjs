@@ -1,26 +1,66 @@
 import js from '@eslint/js';
 import globals from 'globals';
-import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
+  // -------------------------------------------------------------------------
+  // Global ignores
+  // -------------------------------------------------------------------------
+
   {
     ignores: [
       'dist/**',
       'coverage/**',
       'node_modules/**',
       '.next/**',
+      'fixtures/next-app/.next/**',
       'playwright-report/**',
       'test-results/**',
     ],
   },
 
-  js.configs.recommended,
+  // -------------------------------------------------------------------------
+  // JavaScript
+  // -------------------------------------------------------------------------
 
-  ...tseslint.configs.recommendedTypeChecked,
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+
+    ...js.configs.recommended,
+
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2022,
+      },
+    },
+
+    rules: {
+      'no-console': [
+        'warn',
+        {
+          allow: ['warn', 'error'],
+        },
+      ],
+    },
+  },
+
+  // -------------------------------------------------------------------------
+  // TypeScript base
+  // -------------------------------------------------------------------------
+
+  ...tseslint.configs.recommendedTypeChecked.map((config) => ({
+    ...config,
+
+    files: ['**/*.{ts,tsx}'],
+  })),
+
+  // -------------------------------------------------------------------------
+  // TypeScript project configuration
+  // -------------------------------------------------------------------------
 
   {
     files: ['**/*.{ts,tsx}'],
@@ -28,6 +68,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: true,
+
         tsconfigRootDir: import.meta.dirname,
       },
 
@@ -39,25 +80,15 @@ export default tseslint.config(
     },
 
     plugins: {
-      react,
       'react-hooks': reactHooks,
       import: importPlugin,
     },
 
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-
     rules: {
-      ...react.configs.recommended.rules,
-      ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
 
-      'react/prop-types': 'off',
-
       '@typescript-eslint/no-explicit-any': 'warn',
+
       '@typescript-eslint/consistent-type-imports': [
         'error',
         {
@@ -77,7 +108,9 @@ export default tseslint.config(
             'index',
             'type',
           ],
+
           'newlines-between': 'always',
+
           alphabetize: {
             order: 'asc',
             caseInsensitive: true,
@@ -85,9 +118,18 @@ export default tseslint.config(
         },
       ],
 
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': [
+        'warn',
+        {
+          allow: ['warn', 'error'],
+        },
+      ],
     },
   },
+
+  // -------------------------------------------------------------------------
+  // Prettier must remain last
+  // -------------------------------------------------------------------------
 
   eslintConfigPrettier,
 );

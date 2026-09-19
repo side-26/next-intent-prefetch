@@ -9,11 +9,16 @@ export default defineConfig({
 
   retries: process.env.CI ? 2 : 0,
 
-  workers: process.env.CI ? 1 : undefined,
+  ...(process.env.CI ? { workers: 1 } : {}),
 
   reporter: [
     ['list'],
-    ['html', { open: 'never' }],
+    [
+      'html',
+      {
+        open: 'never',
+      },
+    ],
   ],
 
   use: {
@@ -27,15 +32,19 @@ export default defineConfig({
   },
 
   webServer: {
-    command: 'pnpm dev:test-app',
+    command: 'pnpm --dir fixtures/next-app dev',
+
     url: 'http://localhost:3000',
+
     reuseExistingServer: !process.env.CI,
+
     timeout: 120_000,
   },
 
   projects: [
     {
       name: 'chromium',
+
       use: {
         ...devices['Desktop Chrome'],
       },
