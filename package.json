@@ -1,16 +1,22 @@
 {
   "name": "next-intent-prefetch",
-  "version": "1.0.0",
-  "description": "A Next.js library for prefetching pages on user intent.",
+  "version": "1.0.1",
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
     "prepare": "husky",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -24,9 +30,21 @@
     "test:all": "pnpm test:unit && pnpm test:integration",
     "precommit": "lint-staged && pnpm typecheck && pnpm test:all"
   },
-  "keywords": [],
+  "keywords": [
+    "nextjs",
+    "react",
+    "prefetch",
+    "intent",
+    "navigation",
+    "app-router"
+  ],
   "author": "Mahdi Rashidi",
   "license": "ISC",
+  "peerDependencies": {
+    "next": ">=15.0.0 <17",
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
@@ -49,6 +67,7 @@
     "prettier": "^3.9.8",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0",
     "vitest": "^5.0.1"
@@ -61,10 +80,5 @@
     "*.{json,md,yml,yaml,css}": [
       "prettier --write"
     ]
-  },
-  "peerDependencies": {
-    "next": ">=15.0.0 <17",
-    "react": ">=18.2.0 <20",
-    "react-dom": ">=18.2.0 <20"
   }
 }

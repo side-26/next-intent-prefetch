@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+/next-intent-prefetch-demo-app
 # next.js
 /.next/
 /out/
@@ -36,3 +36,4 @@ yarn-error.log*
 next-env.d.ts
 playwright-report/
 test-results/
+.early.coverage
